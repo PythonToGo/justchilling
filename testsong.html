@@ -1,0 +1,119 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <button id="start"> starts </button>
+    <button id="stop"> stop </button>
+    <script>
+        document.querySelector('#start')
+        .addEventListener('click', async () => {
+            await Tone.Transport.start();
+            Tone.Transport.start();
+        });
+        
+        document.querySelector('#stop')
+        .addEventListener('click', async () => {
+            // await Tone.Transport.stop();
+            Tone.Transport.stop();
+        });
+
+        const drum = new Tone.MembraneSynth().toDestination();
+
+        const hat = new Tone.MetalSynth({
+            envelope: { attack : 0.01, decay : 0.1, release: 0.3
+        }}).toDestination();
+
+        const bass = new Tone.FMSynth({
+            oscillator : {type: 'amsawtooth'},
+            envelope : { attack : 0.01, decay : 0.1, sustain : 0.8, release : 0.3
+        }}).toDestination();
+
+        const high = new Tone.PolySynth().toDestination()
+        high.set({
+            volume : -5,
+            oscillator : {type : 'triangle'},
+            envelope : { attack : 0.01, decay : 0.1, release : 5 }
+        })
+
+        const melody = new Tone.PolySynth().toDestination()
+        melody.set({
+            volume : -5,
+            oscillator : {type : 'sawtooth'},
+            envelope : { attack : 0.01, decay : 0.1, release : 5 }
+        })
+
+
+
+
+        new Tone.Loop(t => {
+            drum.triggerAttackRelease("D1", "8n", t)
+            drum.triggerAttackRelease("D1", "8n", t+0.5)
+            drum.triggerAttackRelease("D1", "8n", t+1)
+            drum.triggerAttackRelease("D1", "8n", t+1.5)
+            hat.triggerAttackRelease("D1", "8n", t + 1.74)
+            hat.triggerAttackRelease("D1", "8n", t + 1.84)
+        }, 2).start(0)
+
+
+        new Tone.Loop(t => {
+            bass.triggerAttackRelease("G1", "8n", t)
+            bass.triggerAttackRelease("G1", "8n", t+0.74)
+            bass.triggerAttackRelease("D1", "8n", t+0.84)
+            bass.triggerAttackRelease("D1", "8n", t+1.2)
+            bass.triggerAttackRelease("C1", "8n", t + 1.6)
+
+        }, 4).start(0)
+
+        
+        
+        new Tone.Loop(t => {
+            melody.triggerAttackRelease(["D2","G4"], "8n", t)
+            melody.triggerAttackRelease("G2", "16n", t+0.7)
+            melody.triggerAttackRelease("F4", "16n", t+0.12)
+            melody.triggerAttackRelease("E4", "8n", t+1.28)
+
+            melody.triggerAttackRelease("C4", "8n", t + 2.0)
+            melody.triggerAttackRelease(["G2","G4"], "16n", t + 2.4)
+            melody.triggerAttackRelease("F4", "16n", t+ 2.8)
+            melody.triggerAttackRelease("F4", "8n", t+ 3.28)
+        }, 4).start(0)
+
+        
+
+        new Tone.Loop(t => {
+            // high.triggerAttackRelease("G5", "16n", t)
+            // high.triggerAttackRelease("A5", "16n", t+0.1)
+            // high.triggerAttackRelease("B5", "16n", t+ 0.2)
+            // high.triggerAttackRelease("B5", "8n", t+ 0.3)
+            // high.triggerAttackRelease("B5", "16n", t+ 0.4)
+            // high.triggerAttackRelease("B5", "16n", t+ 0.5)
+            // high.triggerAttackRelease("B5", "16n", t + 0.6)
+            // high.triggerAttackRelease("A5", "16n", t + 0.7)
+            // high.triggerAttackRelease("C5", "16n", t + 0.8)
+            // high.triggerAttackRelease("B5", "16n", t + 0.9)
+            // high.triggerAttackRelease("A5", "16n", t + 4)
+            // high.triggerAttackRelease("A5", "8n", t + 3.2)
+            // high.triggerAttackRelease("A5", "4n", t + 1.1)
+            // high.triggerAttackRelease("A5", "4n", t + 1.2)
+            // high.triggerAttackRelease("A5", "4n", t + 1.3)
+            // high.triggerAttackRelease("G5", "4n", t + 1.4)
+            // high.triggerAttackRelease("F5", "4n", t + 1.5)
+            // high.triggerAttackRelease("G5", "4n", t + 1.6)
+            // high.triggerAttackRelease("A5", "4n", t + 1.7)
+            // // high.triggerAttackRelease("A5", "8n", t + 3.2)
+            // high.triggerAttackRelease("A5", "4n", t + 1.8)
+            // high.triggerAttackRelease("A5", "4n", t + 1.9)
+
+
+        }, 4).start(0)
+        
+
+
+
+
+    </script> 
+</body>
+</html>

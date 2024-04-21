@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <button id="start">Start</button>
+    <button id="stop">Stop</button>
+    <script>
+
+const drum = new Tone.MembraneSynth().toDestination();
+
+        const hat = new Tone.MetalSynth({
+            frequency: 200,
+            envelope: {
+                attack: 0.015,
+                decay: 0.1,
+                release: 0.4
+            },
+            volume: -15
+        }).toDestination();
+
+        const bass = new Tone.Synth({
+            oscillator: { type: 'sine' },
+            envelope: {
+                attack: 0.1,
+                decay: 0.3,
+                sustain: 1.0,
+                release: 2
+            }
+        }).toDestination();
+
+        const piano = new Tone.Synth({
+            oscillator: {
+                type: 'triangle'
+            },
+            envelop: {
+                attack: 0.005,
+                decay: 0.1,
+                sustain: 0.3,
+                release: 1
+            }
+        }).toDestination();
+
+       
+        // melody created
+        let melodyIndex = 0;
+        const pianoNotes = ['C4', 'C4', 'G4', 'G4', 'A4', 'A4', 'G4', null, 'F4', 'F4', 'E4', 'E4', 'D4', 'D4', 'C4', null];
+        const bassNotes = ['C2',        'G2',       'A2',       'G2',        'F2',       'E2',      'D2',       'C2'];
+
+        const pianoSequence = new Tone.Sequence((time, note) => {
+            piano.triggerAttackRelease(note, '4n', time);
+        }, pianoNotes, '4n');
+
+        const bassSequence = new Tone.Sequence((time, note) => {
+            bass.triggerAttackRelease(note, '2n', time);
+        }, bassNotes, '2n');
+
+        Tone.Transport.scheduleRepeat(time => {
+            drum.triggerAttackRelease('C2', '8n', time);
+            hat.triggerAttackRelease('C2', '16n', time);
+        }, '4n');
+
+
+        // start
+        document.querySelector('#start').addEventListener('click', async () => {
+            await Tone.start();
+            console.log('audio is ready');
+
+            Tone.Transport.start();
+            // pianoSequence.start(0);
+            bassSequence.start(0);
+
+           
+        });
+
+        // stop
+        document.querySelector('#stop').addEventListener('click', () => {
+            Tone.Transport.stop();
+            Tone.Transport.cancel();
+            melodyIndex = 0; 
+            console.log('audio is stopped');
+        });
+</script>
+</body>
+</html>
